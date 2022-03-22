@@ -1,4 +1,4 @@
-# 42-formation-lvl2-6.push-swap
+# 42-formation-lvl2-7.push-swap
 
 ### _Project 7: Push Swap - Seventh project for the formation of software engineers at school 42 São Paulo._
 
