@@ -6,64 +6,69 @@
 #    By: vnazioze <vnazioze@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 20:04:18 by vnazioze          #+#    #+#              #
-#    Updated: 2022/03/22 20:04:22 by vnazioze         ###   ########.fr        #
+#    Updated: 2022/03/22 20:06:21 by vnazioze         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-GREEN = \033[0;32m
-RED = \033[0;31m
-RESET = \033[0m
+NAME			:=	so_long
+NAME_BONUS		:=	so_long_bonus
 
-.DEFAULT_GOAL    :=    all
+CC				:=	gcc
 
-NAME = pipex
+CFLAGS			:=	-Wall -Werror -Wextra
+LIB				:=	-lmlx -lXext -lX11
 
-DIRECTORY2 = ./utils/
-DIRECTORY1 = ./src/
+LIBFT			:=	./libft/libft.a
 
-SRC =	$(addprefix $(DIRECTORY1), \
-		exec.c\
-		free.c\
-		main.c\
-		pipes.c\
-		treat_space.c\
-		)
+DIR			:=	./src/
+DIR_BONUS	:=	./src_bonus/
 
-UTILS = $(addprefix $(DIRECTORY2), \
-		ft_split.c \
-        ft_strchr.c \
-        ft_strdup.c \
-        ft_strjoin.c \
-        ft_strlen.c \
-        ft_strncmp.c \
-        ft_strnstr.c \
-        ft_strrchr.c \
-        ft_substr.c \
-		ft_calloc.c \
-		)
+SRC		:=		$(addprefix $(DIR),	\
+				verify_error.c		\
+				exit_free.c			\
+				move.c				\
+				render_game.c		\
+				so_long.c			\
+				read_map.c			\
+				)
+SRC_BONUS =		$(addprefix $(DIR_BONUS),\
+				verify_error.c			\
+				exit_free.c				\
+				move.c					\
+				render_game.c			\
+				so_long.c				\
+				read_map.c				\
+				)
 
-OBJS = $(SRC:.c=.o) $(UTILS:.c=.o)
+OBJS		:=	${SRC:%.c=%.o}
+OBJS_BONUS	:=	${SRC_BONUS:.c=.o}
 
-CFLAG = -g3 -Wall -Wextra -Werror
+.c.o:
+				$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
 
-all: $(NAME)
+all:			$(NAME)
 
-$(NAME): $(OBJS)
-	gcc $(OBJS) -o $(NAME) $(CFLAG) 
-	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
+$(NAME): 		$(LIBFT) $(OBJS)
+				$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB) $(LIBFT)
 
-%.o: %.c
-	gcc $(CFLAG) -c $< -o $@
-	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
+bonus: 			$(NAME_BONUS)
+
+$(NAME_BONUS):	$(LIBFT) $(OBJS_BONUS)
+				$(CC) $(CFLAGS) -o $(NAME_BONUS) $(OBJS_BONUS) $(LIB) $(LIBFT)
+
+$(LIBFT):
+				make bonus -C ./libft
 
 clean:
-	rm -f $(OBJS)
-	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
+				rm -f $(OBJS) $(OBJS_BONUS)
+				make clean -C ./libft
 
-fclean: clean
-	rm -f $(NAME)
-	@echo "$(NAME): $(RED)$(NAME) was deleted$(RESET)"
+fclean:			clean
+				rm -f $(NAME) $(NAME_BONUS)
+				make fclean -C ./libft
 
-re: fclean all
+re:				fclean all
 
-.PHONY: clean fclean re all
+rebonus:		fclean bonus
+
+.PHONY: 		all, clean, fclean, re, bonus, rebonus
