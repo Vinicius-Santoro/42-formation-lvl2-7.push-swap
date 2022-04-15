@@ -6,7 +6,7 @@
 /*   By: vnazioze <vnazioze@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 16:59:22 by vnazioze          #+#    #+#             */
-/*   Updated: 2021/09/15 17:53:15 by vnazioze         ###   ########.fr       */
+/*   Updated: 2022/04/11 20:08:57 by vnazioze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_putstr_fd(char *s, int fd)
 {
-	if (s != '\0')
-		while (*s != '\0')
+	if (s != 0)
+		while (*s != 0)
 			write (fd, s++, 1);
 }

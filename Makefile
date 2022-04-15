@@ -5,70 +5,58 @@
 #                                                     +:+ +:+         +:+      #
 #    By: vnazioze <vnazioze@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/03/22 20:04:18 by vnazioze          #+#    #+#              #
-#    Updated: 2022/03/22 20:06:21 by vnazioze         ###   ########.fr        #
+#    Created: 2022/04/13 20:35:02 by vnazioze          #+#    #+#              #
+#    Updated: 2022/04/13 20:35:04 by vnazioze         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME			:=	so_long
-NAME_BONUS		:=	so_long_bonus
+NAME		=	push_swap
+HEADER		=	push_swap.h
 
-CC				:=	gcc
+INCLUDE		=	-I ./includes
 
-CFLAGS			:=	-Wall -Werror -Wextra
-LIB				:=	-lmlx -lXext -lX11
+CC			=	gcc -g
+RM			=	rm -f
+CFLAGS		=	-Wall -Wextra -Werror
 
-LIBFT			:=	./libft/libft.a
+LIBFT		=	./libs/libft/libft.a
+PRINTF		=	./libs/printf/libftprintf.a
 
-DIR			:=	./src/
-DIR_BONUS	:=	./src_bonus/
+SRC_PATH	=	./src/
+OBJ_PATH	=	./obj/
 
-SRC		:=		$(addprefix $(DIR),	\
-				verify_error.c		\
-				exit_free.c			\
-				move.c				\
-				render_game.c		\
-				so_long.c			\
-				read_map.c			\
-				)
-SRC_BONUS =		$(addprefix $(DIR_BONUS),\
-				verify_error.c			\
-				exit_free.c				\
-				move.c					\
-				render_game.c			\
-				so_long.c				\
-				read_map.c				\
-				)
+SRC_FILES	=	main.c validations.c linked_list.c	\
+				rules.c locate_number.c utils.c		\
+				operations.c
 
-OBJS		:=	${SRC:%.c=%.o}
-OBJS_BONUS	:=	${SRC_BONUS:.c=.o}
+SRC			=	$(addprefix $(SRC_PATH),$(SRC_FILES))
+OBJ			=	$(addprefix $(OBJ_PATH),$(subst .c,.o,$(SRC_FILES)))
 
-.c.o:
-				$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
+$(OBJ_PATH)%.o:	$(SRC_PATH)%.c
+				mkdir -p $(OBJ_PATH)
+				$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 all:			$(NAME)
 
-$(NAME): 		$(LIBFT) $(OBJS)
-				$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB) $(LIBFT)
-
-bonus: 			$(NAME_BONUS)
-
-$(NAME_BONUS):	$(LIBFT) $(OBJS_BONUS)
-				$(CC) $(CFLAGS) -o $(NAME_BONUS) $(OBJS_BONUS) $(LIB) $(LIBFT)
-
+$(NAME):		$(LIBFT) $(PRINTF) $(OBJ)
+				$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT) $(PRINTF)
+				
 $(LIBFT):
-				make bonus -C ./libft
+				make bonus -C ./libs/libft
+
+$(PRINTF):
+				make all -C ./libs/printf
 
 clean:
-				rm -f $(OBJS) $(OBJS_BONUS)
-				make clean -C ./libft
+				$(RM) $(OBJ)
+				make clean -C libs/libft
+				make clean -C libs/printf
 
 fclean:			clean
-				rm -f $(NAME) $(NAME_BONUS)
-				make fclean -C ./libft
+				$(RM) $(NAME)
+				make fclean -C libs/libft
+				make fclean -C libs/printf
 
 re:				fclean all
 
-rebonus:		fclean bonus
-
-.PHONY: 		all, clean, fclean, re, bonus, rebonus
+.PHONY:			all, clean, fclean, re

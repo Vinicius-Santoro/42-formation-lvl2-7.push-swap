@@ -32,11 +32,11 @@ BONUS_O =	$(BONUS_S:.c=.o)
 
 all:		$(NAME)
 
-$(NAME):	$(OBJS)
-			ar -rcs $(NAME) $(OBJS)
+$(NAME):	$(OBJS) $(BONUS_O)
+			ar rcs $(NAME) $(OBJS)
 
 bonus:		$(NAME) $(BONUS_O)
-			ar -rcs $(NAME) $(BONUS_O)
+			ar rcs $(NAME) $(BONUS_O)
 
 .c.o:
 			$(CC) $(FLAGS) -c $< -o $(<:.c=.o)
